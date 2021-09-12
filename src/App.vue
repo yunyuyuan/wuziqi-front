@@ -5,7 +5,7 @@ import Pitch from "./pages/pitch/index.vue"
 </script>
 
 <template>
-  <Pitch/>
+  <router-view></router-view>
 </template>
 
 <style>
