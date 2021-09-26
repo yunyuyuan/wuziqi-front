@@ -8,7 +8,7 @@ import router from './route'
 
 const app = createApp(App);
 
-app.use(ElementPlus);
-app.use(router)
+app.use(ElementPlus, {size: 'small'});
+app.use(router);
 createStore(app);
 app.mount('#app')

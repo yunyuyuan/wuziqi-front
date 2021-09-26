@@ -4,8 +4,11 @@ import {ComponentOptionsMixin, reactive} from "vue";
 export default function (app: App): void{
     app.provide('socket_', {val: undefined})
         .provide('game_', reactive({val: {
-            enemy: '',
-            me: '',
+            isHost: false,
+            secret: '',
+            create: '',
+            enemy: 'unknown',
+            me: 'unknown',
             turnTo: false
         }}))
 }
@@ -19,14 +22,19 @@ export const injectMixin: ComponentOptionsMixin = {
         },
         gameInfo (){
             return this.game_.val
+        },
+        socketConnected (){
+            return this.socket.connected
         }
     },
     methods: {
         setSocket (v: any){
             this.socket_.val = v; 
         },
-        setGameInfo (v: any){
-            this.game_.val = v; 
+        setGameInfo (v: Record<string, any>){
+            for (const k of Object.keys(v)) {
+                this.game_.val[k] = v[k];
+            }
         }
     }
 }

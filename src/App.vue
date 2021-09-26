@@ -1,12 +1,19 @@
-<script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import Pitch from "./pages/pitch/index.vue"
-</script>
-
 <template>
   <router-view></router-view>
 </template>
+
+<script lang="ts">
+import {injectMixin} from "./store";
+import {Client} from "./utils/socket";
+
+export default {
+  mixins: [injectMixin],
+  created() {
+    const socket = new Client();
+    this.setSocket(socket);
+  }
+}
+</script>
 
 <style>
 </style>

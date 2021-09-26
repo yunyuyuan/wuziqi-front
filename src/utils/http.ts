@@ -3,7 +3,7 @@ import { ElNotification } from 'element-plus';
 import { h } from 'vue';
 import {httpUrl} from "../config";
 
-export async function post(path: string, data: {[key: string]: any} = {}): Promise<Record<string, any> | undefined>{
+export async function post(path: string, data: {[key: string]: any} = {}): Promise<object | undefined>{
     try {
         const result = await axios({
             url: `${httpUrl}/${path}`,
@@ -16,12 +16,25 @@ export async function post(path: string, data: {[key: string]: any} = {}): Promi
                 title: '出错了',
                 message: h(
                     'strong',
+                    {style: 'color: red;'},
                     `状态码: ${result.status}`
                 )
             })
             return undefined;
         }
-        return result.data;
+        const resp: Record<string, any> = result.data;
+        if (resp.err){
+            ElNotification({
+                title: '出错了',
+                message: h(
+                    'strong',
+                    {style: 'color: red;'},
+                    resp.msg
+                )
+            })
+            return undefined
+        }
+        return resp
     }catch (e) {
         ElNotification({
             title: '出错了',

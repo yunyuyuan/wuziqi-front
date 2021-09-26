@@ -1,17 +1,19 @@
 <template>
-  <li>
+  <div class="flexc table">
     <p><b>玩家1</b>{{player1}}</p>
     <p><b>玩家2</b><span class="can-join" v-if="player2==null">可加入</span>{{player2}}</p>
     <p><b>对局时间</b>{{play_time}}</p>
-    <el-button @click="$emit('join')">加入</el-button>
-  </li>
+    <div class="flex w100 footer">
+      <el-button type="success" v-if="player2==null" @click="$emit('join')" plain>加入</el-button>
+      <el-button @click="watchGame" :disabled="player2==null" type="info" plain>观战</el-button>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import dayjs from "dayjs";
 import {enhanceTime} from "../../utils/utils";
 import {injectMixin} from "../../store";
-import {watchEffect} from "vue";
 
 export default {
   name: "the-table",
@@ -21,7 +23,7 @@ export default {
     }
   },
   mixins: [injectMixin],
-  emits: ['join'],
+  emits: ['join', 'watch'],
   data (){
     return {
       
@@ -36,23 +38,51 @@ export default {
       play_time: data.player2.nick==null?'暂无':enhanceTime(times)
     }
   },
+  methods: {
+    watchGame (){
+      this.setGameInfo({
+        secret: '',
+        create: item.create,
+        me: item.player1.nick,
+        enemy: item.player2.nick,
+        turnTo: false
+      })
+      this.$router.push('/watch')
+    }
+  }
 }
 </script>
 
 <style scoped lang="scss">
-li{
+.table{
+  padding: 15px 20px;
+  border: 1px solid #e5a5ff;
+  border-radius: 5px;
+  margin: 20px 0 0 20px;
+  align-items: flex-start;
+  &:hover{
+    box-shadow: 0 0 0 1px #c83eff;
+  }
   p{
+    margin-bottom: 8px;
+    font-size: .85rem;
+    font-weight: bold;
     b{
       display: inline-block;
+      font-weight: normal;
       width: 5rem;
     }
     .can-join{
-      background: #ff6600;
+      background: #ff9e5e;
       color: white;
       border-radius: 4px;
       padding: 1px 6px;
-      font-size: .85rem;
+      font-size: .7rem;
     }
+  }
+  .footer{
+    margin-top: 10px;
+    justify-content: center;
   }
 }
 </style>

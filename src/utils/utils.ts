@@ -20,3 +20,21 @@ export function enhanceTime (time: number): string{
     }
     return s_hour+s_minute+s_second;
 }
+
+export function throttle(func: Function, interval=32){
+    if (typeof func !== 'function') return;
+    let isFirst = true;
+    let handler: number|null = null;
+    return function (){
+        const args = arguments;
+        if (isFirst) {
+            isFirst = false;
+            func(args);
+        } else if (!handler){
+            handler = setTimeout(()=>{
+                func(...args);
+                handler = null;
+            }, interval)
+        }
+    }
+}
