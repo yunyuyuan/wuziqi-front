@@ -21,7 +21,7 @@ export class Client{
                 showClose: true,
                 message: 'websocket连接成功!',
             });
-        })
+        });
         this.socket.on('connect_error', (e: any) => {
             ElMessage({
                 type: 'error',
@@ -29,21 +29,21 @@ export class Client{
                 message: `websocket连接失败: ${e}`,
             });
             this.socket.close();
-        })
+        });
         this.socket.on('reconnect', () => {
             ElMessage({
                 type: 'warning',
                 showClose: true,
                 message: '尝试重新连接websocket!',
             });
-        })
+        });
         this.socket.on('disconnect', (e: any) => {
             ElMessage({
                 type: 'warning',
                 showClose: true,
                 message: `websocket连接断开: ${e}`,
-            });
-        })
+            })
+        });
         this.socket.on('game_start', (data: any)=>this.gameStarted(data))
         this.socket.on('chess_update', (data: any)=>this.chessUpdated(data))
         this.socket.on('game_end', (data: any)=>this.gameEnded(data))
