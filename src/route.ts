@@ -1,4 +1,4 @@
-import {createRouter, RouteRecordRaw, createWebHistory} from "vue-router";
+import {createRouter, RouteRecordRaw, createWebHashHistory} from "vue-router";
 import PitchComponent from './pages/pitch/index.vue' 
 
 const routes: RouteRecordRaw[] = [
@@ -18,6 +18,6 @@ const routes: RouteRecordRaw[] = [
 ]
 
 export default createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes, 
 })

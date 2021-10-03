@@ -282,7 +282,11 @@ export default defineComponent({
       }
     },
     mouseMove: throttle(function (e: MouseEvent) {
-      const {offsetX, offsetY} = e;
+      // 浏览器的奇葩兼容性
+      const target  = e.target || e.srcElement,
+            rect    = target.getBoundingClientRect(),
+            offsetX = e.clientX - rect.left,
+            offsetY = e.clientY - rect.top;
       const originX = offsetX - this.padding + this.interval / 2;
       const originY = offsetY - this.padding + this.interval / 2;
       const x = Math.floor(originX / this.interval);
@@ -304,7 +308,7 @@ export default defineComponent({
       }
     },
     computeClock (turn: boolean): string{
-      if (turn) {
+      if (turn && !this.gameOver) {
         return this.clock.toString();
       }
       return '--'
