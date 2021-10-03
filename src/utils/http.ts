@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ElNotification } from 'element-plus';
 import { h } from 'vue';
-import {httpUrl} from "../config";
+const httpUrl = process.env.HTTP_URL || 'http://192.168.0.103:6768';
 
 export async function post(path: string, data: {[key: string]: any} = {}): Promise<object | undefined>{
     try {
