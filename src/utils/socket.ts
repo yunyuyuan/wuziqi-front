@@ -1,7 +1,7 @@
 import {io} from 'socket.io-client';
 import {ElMessage, ElNotification} from "element-plus";
 import {Socket} from "socket.io-client/build/socket";
-const socketUrl = process.env.SOCKET_URL || 'http://192.168.0.103:6768';
+const socketUrl = import.meta.env.VITE_SOCKET_URL;
 
 export class Client{
     private readonly socket: Socket;
