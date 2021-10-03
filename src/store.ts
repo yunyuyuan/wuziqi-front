@@ -8,7 +8,9 @@ export default function (app: App): void{
             secret: '',
             create: '',
             enemy: 'unknown',
+            enemyAvatar: 'dog',
             me: 'unknown',
+            meAvatar: 'dog',
             turnTo: false
         }}))
 }

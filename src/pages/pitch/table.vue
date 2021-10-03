@@ -2,7 +2,7 @@
   <div class="flexc table">
     <p><b>玩家1</b>{{player1}}</p>
     <p><b>玩家2</b><span class="can-join" v-if="player2==null">可加入</span>{{player2}}</p>
-    <p><b>对局时间</b>{{play_time}}</p>
+    <p><b>对局时间</b>{{player2==null?'暂无':updateTime.value}}</p>
     <div class="flex w100 footer">
       <el-button type="success" v-if="player2==null" @click="$emit('join')" plain>加入</el-button>
       <el-button @click="watchGame" :disabled="player2==null" type="info" plain>观战</el-button>
@@ -11,40 +11,34 @@
 </template>
 
 <script lang="ts">
-import dayjs from "dayjs";
-import {enhanceTime} from "../../utils/utils";
 import {injectMixin} from "../../store";
 
 export default {
   name: "the-table",
   props: {
-    item: {
-      type: Object
-    }
+    item: Object,
+    updateTime: Object
   },
   mixins: [injectMixin],
   emits: ['join', 'watch'],
-  data (){
-    return {
-      
-    }
-  },
   setup (props){
     const data = props.item;
-    const times = Math.floor(dayjs(dayjs().diff(data.create))/1000);
     return {
+      create: data.create,
       player1: data.player1.nick,
-      player2: data.player2.nick,
-      play_time: data.player2.nick==null?'暂无':enhanceTime(times)
+      player2: data.player2.nick
     }
   },
   methods: {
     watchGame (){
+      const item = this.$props.item;
       this.setGameInfo({
         secret: '',
         create: item.create,
         me: item.player1.nick,
+        meAvatar: item.player1.avatar,
         enemy: item.player2.nick,
+        enemyAvatar: item.player2.avatar,
         turnTo: false
       })
       this.$router.push('/watch')

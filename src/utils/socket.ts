@@ -10,6 +10,7 @@ export class Client{
     chessUpdateFn: Function | undefined;
     gameEndFn: Function | undefined;
     watcherNumChangeFn: Function | undefined;
+    msgUpdateFn: Function | undefined;
     
     constructor() {
         this.socket = io(socketUrl, {
@@ -48,6 +49,7 @@ export class Client{
         this.socket.on('chess_update', (data: any)=>this.chessUpdated(data))
         this.socket.on('game_end', (data: any)=>this.gameEnded(data))
         this.socket.on('watcher_num_change', (data: any)=>this.watcherNumChanged(data))
+        this.socket.on('msg_update', (data: any)=>this.msgUpdate(data))
         this.socket.on('_error', Client.socketError)
     }
     
@@ -76,6 +78,14 @@ export class Client{
         const watcherNumChangeFn = this.watcherNumChangeFn;
         if (typeof watcherNumChangeFn == 'function'){
             watcherNumChangeFn(data)
+        }
+    }
+    
+    
+    private msgUpdate(data: any): void{
+        const msgUpdateFn = this.msgUpdateFn;
+        if (typeof msgUpdateFn == 'function'){
+            msgUpdateFn(data)
         }
     }
     
@@ -136,11 +146,15 @@ export class Client{
         this.watcherNumChangeFn = cb;
     }
     
+    public listenMsgUpdate (cb: Function): void{
+        this.msgUpdateFn = cb;
+    }
+    
     public listenEnd (cb: Function): void{
         this.gameEndFn = cb;
     }
     
-    public cancelCreate (create: string): void{
+    public cancelCreate (): void{
         this.socket.emit('cancel_create')
     }
 
@@ -148,6 +162,14 @@ export class Client{
         if (this.checkConnected()) {
             this.socket.emit('put_chess', {
                 pos,
+            })
+        }
+    }
+
+    public sendMsg(msg: string): void{
+        if (this.checkConnected()) {
+            this.socket.emit('send_msg', {
+                msg,
             })
         }
     }

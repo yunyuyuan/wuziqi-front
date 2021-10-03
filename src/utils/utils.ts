@@ -21,20 +21,47 @@ export function enhanceTime (time: number): string{
     return s_hour+s_minute+s_second;
 }
 
-export function throttle(func: Function, interval=32){
-    if (typeof func !== 'function') return;
+export function throttle(func: Function, interval=32): Function{
     let isFirst = true;
     let handler: number|null = null;
-    return function (){
+    return function () {
         const args = arguments;
         if (isFirst) {
             isFirst = false;
-            func(args);
+            func.apply(this, args);
         } else if (!handler){
             handler = setTimeout(()=>{
-                func(...args);
+                func.apply(this, args);
                 handler = null;
             }, interval)
         }
     }
+}
+
+import mouse from '../assets/image/avatar/mouse.png'
+import cow from '../assets/image/avatar/cow.png'
+import tiger from '../assets/image/avatar/tiger.png'
+import rabbit from '../assets/image/avatar/rabbit.png'
+import dragon from '../assets/image/avatar/dragon.png'
+import snake from '../assets/image/avatar/snake.png'
+import horse from '../assets/image/avatar/horse.png'
+import sheep from '../assets/image/avatar/sheep.png'
+import monkey from '../assets/image/avatar/monkey.png'
+import chicken from '../assets/image/avatar/chicken.png'
+import dog from '../assets/image/avatar/dog.png'
+import pig from '../assets/image/avatar/pig.png'
+
+export const avatars = {
+    mouse,
+    cow,
+    tiger,
+    rabbit,
+    dragon,
+    snake,
+    horse,
+    sheep,
+    monkey,
+    chicken,
+    dog,
+    pig,
 }

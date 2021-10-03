@@ -6,3 +6,5 @@ dist-ssr
 
 .idea
 yarn.lock
+
+src/config.ts
