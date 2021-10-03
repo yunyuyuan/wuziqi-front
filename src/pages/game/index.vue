@@ -429,7 +429,7 @@ export default defineComponent({
           }
         }
       }
-      ::v-deep .send{
+      :deep(.send){
         margin-top: 15px;
       }
     }
