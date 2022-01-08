@@ -41,12 +41,14 @@
               <b>{{msg.nick}}:</b><span>{{msg.msg}}</span>
             </p>
           </div>
-          <el-autocomplete :fetch-suggestions="querySearch" class="send" maxlength="20" show-word-limit v-model="msgSend" @select="msgSend=$event" placeholder="发送聊天">
-            <template #append><el-button type="primary" :disabled="gameOver || !msgSend" @click="sendMsg">发送</el-button></template>
-            <template #default="{ item }">
-              <p>{{ item }}</p>
-            </template>
-          </el-autocomplete>
+          <div class="msg-send flex">
+            <el-autocomplete :disabled="gameOver || !gameInfo.secret" :fetch-suggestions="querySearch" class="send" maxlength="20" show-word-limit v-model="msgSend" @select="msgSend=$event" placeholder="发送聊天">
+              <template #default="{ item }">
+                <p>{{ item }}</p>
+              </template>
+            </el-autocomplete>
+            <el-button type="primary" :disabled="gameOver || !gameInfo.secret || !msgSend" @click="sendMsg">发送</el-button>
+          </div>
         </div>
         <div class="player flex">
           <img :src="avatars[gameInfo.meAvatar]"/>
@@ -165,7 +167,7 @@ export default defineComponent({
     async leave() {
       if (this.isWatch) {
         this.socket.leaveRoom();
-      } else if (!this.gameOver) {
+      } else if (this.gameInfo.secret && !this.gameOver) {
         try {
           await ElMessageBox.confirm('中途退出，游戏将直接结束', {
             type: 'warning',
@@ -325,11 +327,12 @@ export default defineComponent({
     position: relative;
     button{
       position: absolute;
-      left: 10px;
+      left: 20px;
     }
   }
   section{
     text-align: center;
+    padding-bottom: 30px;
     >div{
       text-align: unset;
       height: 100%;
@@ -344,6 +347,7 @@ export default defineComponent({
     flex-shrink: 0;
     box-shadow: 0 0 20px #ff920066 inset;
     border: 1px solid #ff9200;
+    margin-left: 20px;
     *{
       position: absolute;
       background: black;
@@ -433,8 +437,19 @@ export default defineComponent({
           }
         }
       }
-      :deep(.send){
+      .msg-send{
         margin-top: 15px;
+        :deep(.send){
+          flex-grow: 1;
+          input {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+          }
+        }
+        button {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
       }
     }
     .player{
