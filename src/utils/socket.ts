@@ -1,7 +1,7 @@
 import {io} from 'socket.io-client';
 import {ElMessage, ElNotification} from "element-plus";
 import {Socket} from "socket.io-client/build/socket";
-const socketUrl = import.meta.env.VITE_SOCKET_URL;
+const socketUrl = import.meta.env.VITE_SOCKET_URL as string;
 
 export class Client{
     private readonly socket: Socket;
@@ -13,6 +13,7 @@ export class Client{
     
     constructor() {
         this.socket = io(socketUrl, {
+            path: '/api/socket.io',
             reconnection: true
         });
         this.socket.on('connect', () => {
